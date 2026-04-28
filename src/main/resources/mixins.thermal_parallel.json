@@ -5,13 +5,7 @@
 	"target": "@env(DEFAULT)",
 	"minVersion": "0.8.5",
 	"compatibilityLevel": "JAVA_8",
-	"mixins": [
-		"thermal.AugmentableBlockEntityMixin",
-		"thermal.ItemStorageCoFHMixin",
-		"thermal.MachineBlockEntityMixin",
-		"thermal.Reconfigurable4WayBlockEntityMixin",
-		"thermal.ThermalAugmentRulesMixin"
-	],
+	"mixins": [],
 	"server": [],
 	"client": []
 }

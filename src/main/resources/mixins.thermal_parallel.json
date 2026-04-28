@@ -1,0 +1,17 @@
+{
+	"package": "",
+	"required": true,
+	"refmap": "mixins.thermal_parallel.refmap.json",
+	"target": "@env(DEFAULT)",
+	"minVersion": "0.8.5",
+	"compatibilityLevel": "JAVA_8",
+	"mixins": [
+		"thermal.AugmentableBlockEntityMixin",
+		"thermal.ItemStorageCoFHMixin",
+		"thermal.MachineBlockEntityMixin",
+		"thermal.Reconfigurable4WayBlockEntityMixin",
+		"thermal.ThermalAugmentRulesMixin"
+	],
+	"server": [],
+	"client": []
+}

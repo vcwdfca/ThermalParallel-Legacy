@@ -1,0 +1,29 @@
+{
+	"forge_marker": 1,
+	"defaults": {
+		"model": "builtin/generated",
+		"textures": {
+			"layer0": "thermalexpansion:items/augment/placeholder"
+		},
+		"transform": "forge:default-item"
+	},
+	"variants": {
+		"type": {
+			"machineParallel1": {
+				"textures": {
+					"layer0": "thermal_parallel:item/augment/parallel_1"
+				}
+			},
+			"machineParallel2": {
+				"textures": {
+					"layer0": "thermal_parallel:item/augment/parallel_2"
+				}
+			},
+			"machineParallel3": {
+				"textures": {
+					"layer0": "thermal_parallel:item/augment/parallel_3"
+				}
+			}
+		}
+	}
+}

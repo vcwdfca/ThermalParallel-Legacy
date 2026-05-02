@@ -1,0 +1,6 @@
+{
+    "parent": "item/generated",
+    "textures": {
+        "layer0": "thermal_parallel:item/augment/parallel_3"
+    }
+}

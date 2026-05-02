@@ -1,3 +1,6 @@
 #zh
 itemGroup.Parallel=并行
-item.thermalexpansion.augment.machineParallel.name=并行
+
+item.ThermalParallel.augment.machineParallel1.name=并行1
+item.ThermalParallel.augment.machineParallel2.name=并行2
+item.ThermalParallel.augment.machineParallel3.name=并行3

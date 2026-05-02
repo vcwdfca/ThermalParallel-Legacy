@@ -10,6 +10,7 @@ public class CommonProxy {
         Items.preInit();
     }
 
+    @SuppressWarnings("UnusedReturnValue")
     public boolean addIModelRegister(IModelRegister modelRegister) {
         return false;
     }

@@ -1,3 +1,6 @@
 #en
 itemGroup.Parallel=Parallel
-item.thermalexpansion.augment.machineParallel.name=parallel
+
+item.ThermalParallel.augment.machineParallel1.name=parallel1
+item.ThermalParallel.augment.machineParallel2.name=parallel2
+item.ThermalParallel.augment.machineParallel3.name=parallel3

@@ -4,22 +4,22 @@ import cofh.thermalexpansion.item.ItemAugment;
 import com.vcwdfca.thermal_parallel.ThermalParallel;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.creativetab.CreativeTabs;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
 
+import javax.annotation.Nonnull;
 import java.util.Map;
-import java.util.Objects;
 
 public class TePaItems extends ItemAugment {
 
     public TePaItems() {
-        name = "Augment";
         modName = ThermalParallel.MOD_NAME;
-
+        this.setTranslationKey("augment");
         this.setCreativeTab(new CreativeTabs("Parallel") {
             @Override
+            @Nonnull
             public ItemStack createIcon() {
                 return machineParallel1;
             }
@@ -29,7 +29,14 @@ public class TePaItems extends ItemAugment {
     @Override
     public void registerModels() {
         for(Map.Entry<Integer, ItemEntry> entry : this.itemMap.entrySet()) {
-            ModelLoader.setCustomModelResourceLocation(this, (Integer)entry.getKey(), new ModelResourceLocation(Objects.requireNonNull(this.getRegistryName()), "inventory"));
+            ModelLoader.setCustomModelResourceLocation(
+                    this,
+                    entry.getKey(),
+                    new ModelResourceLocation(
+                            new ResourceLocation(ThermalParallel.MOD_ID, "augment"),
+                            "type=" + entry.getValue().name
+                    )
+            );
         }
     }
 

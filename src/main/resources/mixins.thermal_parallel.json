@@ -8,7 +8,8 @@
 	"mixins": [
 		"thermal.IMixinItemAugment",
 		"thermal.MixinTileInventory",
-		"thermal.MixinTileMachineBase"
+		"thermal.MixinTileMachineBase",
+		"thermal.machine.MixinTileFurnace"
 	],
 	"server": [],
 	"client": []

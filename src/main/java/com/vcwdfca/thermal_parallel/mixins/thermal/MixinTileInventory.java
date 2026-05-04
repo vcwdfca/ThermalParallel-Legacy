@@ -11,12 +11,12 @@ public class MixinTileInventory implements IMixinTileInventory {
     private int thermal_parallel$parallel = 1;
 
     @Override
-    public int Thermal_parallel$getParallel() {
+    public int thermal_parallel$getParallel() {
         return thermal_parallel$parallel;
     }
 
     @Override
-    public void Thermal_parallel$setParallel(int parallel) {
+    public void thermal_parallel$setParallel(int parallel) {
         thermal_parallel$parallel = parallel;
     }
 }

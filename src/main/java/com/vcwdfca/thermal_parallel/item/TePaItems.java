@@ -29,12 +29,13 @@ public class TePaItems extends ItemAugment {
         ThermalParallel.proxy.addIModelRegister(this);
 
         machineParallel1 = this.registerAugmentParallel(0, "machineParallel1");
-        machineParallel2 = this.registerAugmentParallel(1, "machineParallel2");
-        machineParallel3 = this.registerAugmentParallel(2, "machineParallel3");
+        //machineParallel2 = this.registerAugmentParallel(1, "machineParallel2");
+        //machineParallel3 = this.registerAugmentParallel(2, "machineParallel3");
 
         return true;
     }
 
+    @SuppressWarnings("SameParameterValue")
     private ItemStack registerAugmentParallel(int metadata, String name) {
         return this.registerItem(metadata, name, MACHINE_PARALLEL);
     }
@@ -48,6 +49,6 @@ public class TePaItems extends ItemAugment {
     public static final String MACHINE_PARALLEL = "machineParallel";
 
     public static ItemStack machineParallel1;
-    public static ItemStack machineParallel2;
-    public static ItemStack machineParallel3;
+    //public static ItemStack machineParallel2;
+    //public static ItemStack machineParallel3;
 }

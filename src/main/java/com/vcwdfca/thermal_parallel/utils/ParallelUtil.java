@@ -3,18 +3,70 @@ package com.vcwdfca.thermal_parallel.utils;
 import cofh.core.block.TileInventory;
 import com.vcwdfca.thermal_parallel.utils.mixins.thermal.IMixinTileInventory;
 
+import java.util.Arrays;
+
 public interface ParallelUtil {
     default int maxParallel(int recipeIn, int recipeOut, int inCount, int outCount) {
-        if(recipeIn <= 0 || recipeOut <= 0) {
+        return maxParallel(new int[]{recipeIn}, new int[]{recipeOut}, new int[]{inCount}, new int[]{outCount});
+    }
+
+    default int maxParallel(int recipeIn, int[] recipeOut, int inCount, int[] outCount) {
+        return maxParallel(new int[]{recipeIn}, recipeOut, new int[]{inCount}, outCount);
+    }
+
+    default int maxParallel(int[] recipeIn, int recipeOut, int[] inCount, int outCount) {
+        return maxParallel(recipeIn, new int[]{recipeOut}, inCount, new int[]{outCount});
+    }
+
+    default int maxParallel(int[] recipeIn, int[] recipeOut, int[] inCount, int[] outCount) {
+        int inventoryStackLimit = ((TileInventory) this).getInventoryStackLimit();
+        int[] outSlotLimits = new int[recipeOut == null ? 0 : recipeOut.length];
+        Arrays.fill(outSlotLimits, inventoryStackLimit);
+        return maxParallel(recipeIn, recipeOut, inCount, outCount, outSlotLimits);
+    }
+
+    default int maxParallel(int[] recipeIn, int[] recipeOut, int[] inCount, int[] outCount, int[] outSlotLimits) {
+        if (recipeIn == null || recipeOut == null || inCount == null || outCount == null || outSlotLimits == null) {
             return 0;
         }
-        int outSpace = ((TileInventory) this).getInventoryStackLimit() - outCount;
-        if(outSpace <= 0) {
+        if (recipeIn.length != inCount.length || recipeOut.length != outCount.length || recipeOut.length != outSlotLimits.length) {
             return 0;
         }
 
-        int maxByInput = inCount / recipeIn;
-        int maxByOutput = outSpace / recipeOut;
-        return Math.min(((IMixinTileInventory) this).thermal_parallel$getParallel(), Math.min(maxByInput, maxByOutput));
+        int parallelLimit = ((IMixinTileInventory) this).thermal_parallel$getParallel();
+        if (parallelLimit <= 0) {
+            return 0;
+        }
+
+        int maxByInput = parallelLimit;
+        int maxByOutput = parallelLimit;
+
+        for (int i = 0; i < recipeIn.length; i++) {
+            int recipeCount = recipeIn[i];
+            if (recipeCount <= 0) {
+                continue;
+            }
+            maxByInput = Math.min(maxByInput, inCount[i] / recipeCount);
+            if (maxByInput == 0) {
+                return 0;
+            }
+        }
+
+        for (int i = 0; i < recipeOut.length; i++) {
+            int recipeCount = recipeOut[i];
+            if (recipeCount <= 0) {
+                continue;
+            }
+            int outSpace = outSlotLimits[i] - outCount[i];
+            if (outSpace <= 0) {
+                return 0;
+            }
+            maxByOutput = Math.min(maxByOutput, outSpace / recipeCount);
+            if (maxByOutput == 0) {
+                return 0;
+            }
+        }
+
+        return Math.min(parallelLimit, Math.min(maxByInput, maxByOutput));
     }
 }

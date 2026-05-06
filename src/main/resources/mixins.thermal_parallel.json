@@ -9,6 +9,11 @@
 		"thermal.IMixinItemAugment",
 		"thermal.MixinTileInventory",
 		"thermal.MixinTileMachineBase",
+		"thermal.machine.MixinTileBrewer",
+		"thermal.machine.MixinTileCentrifuge",
+		"thermal.machine.MixinTileCharger",
+		"thermal.machine.MixinTileCompactor",
+		"thermal.machine.MixinTileCrafter",
 		"thermal.machine.MixinTileFurnace"
 	],
 	"server": [],

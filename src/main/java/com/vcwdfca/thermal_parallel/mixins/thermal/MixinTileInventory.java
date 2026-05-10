@@ -8,15 +8,15 @@ import org.spongepowered.asm.mixin.Unique;
 @Mixin(value = TileInventory.class, remap = false)
 public class MixinTileInventory implements IMixinTileInventory {
     @Unique
-    private int thermal_parallel$parallel = 1;
+    private int tp$parallel = 1;
 
     @Override
-    public int thermal_parallel$getParallel() {
-        return thermal_parallel$parallel;
+    public int tp$getParallel() {
+        return tp$parallel;
     }
 
     @Override
-    public void thermal_parallel$setParallel(int parallel) {
-        thermal_parallel$parallel = parallel;
+    public void tp$setParallel(int parallel) {
+        tp$parallel = parallel;
     }
 }

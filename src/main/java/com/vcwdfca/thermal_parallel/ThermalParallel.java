@@ -15,6 +15,7 @@ public class ThermalParallel {
     public static final String CLIENT_PROXY = "com.vcwdfca.thermal_parallel.proxy.ClientProxy";
     public static final String COMMON_PROXY = "com.vcwdfca.thermal_parallel.proxy.CommonProxy";
 
+    @SuppressWarnings("unused")
     private static final Logger LOGGER = LogManager.getLogger(Tags.MOD_NAME);
 
     @SidedProxy(clientSide = CLIENT_PROXY, serverSide = COMMON_PROXY)

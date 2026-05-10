@@ -18,7 +18,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(value = TileCompactor.class, remap = false)
 public class MixinTileCompactor extends TileMachineBase implements ParallelUtil {
     @Unique
-    private int thermal_parallel$maxParallel;
+    private int tp$maxParallel;
 
     @Shadow
     CompactorManager.CompactorRecipe curRecipe;
@@ -26,7 +26,7 @@ public class MixinTileCompactor extends TileMachineBase implements ParallelUtil 
     @Inject(method = "processFinish", at = @At(value = "INVOKE", target = "Lcofh/thermalexpansion/util/managers/machine/CompactorManager$CompactorRecipe;getOutput()Lnet/minecraft/item/ItemStack;"))
     private void initParallel(CallbackInfo ci, @Local(name = "recipe")CompactorManager.CompactorRecipe recipe) {
         this.curRecipe = recipe;
-        thermal_parallel$maxParallel = this.maxParallel(
+        this.tp$maxParallel = this.maxParallel(
                 this.curRecipe.getInput().getCount(),
                 this.curRecipe.getOutput().getCount(),
                 this.inventory[0].getCount(),
@@ -37,17 +37,17 @@ public class MixinTileCompactor extends TileMachineBase implements ParallelUtil 
     @ModifyArg(method = "processFinish", at = @At(value = "INVOKE", target = "Lcofh/core/util/helpers/ItemHelper;cloneStack(Lnet/minecraft/item/ItemStack;)Lnet/minecraft/item/ItemStack;"))
     private ItemStack parallelOutput1(ItemStack stack) {
         ItemStack parallelOutput = ItemHelper.cloneStack(stack);
-        parallelOutput.setCount(this.thermal_parallel$maxParallel * parallelOutput.getCount());
+        parallelOutput.setCount(this.tp$maxParallel * parallelOutput.getCount());
         return parallelOutput;
     }
 
     @ModifyArg(method = "processFinish", at = @At(value = "INVOKE", target = "Lnet/minecraft/item/ItemStack;grow(I)V"))
     private int parallelOutput2(int quantity) {
-        return this.thermal_parallel$maxParallel * quantity;
+        return this.tp$maxParallel * quantity;
     }
 
     @ModifyArg(method = "processFinish", at = @At(value = "INVOKE", target = "Lnet/minecraft/item/ItemStack;shrink(I)V"))
     private int parallelInput(int quantity) {
-        return this.thermal_parallel$maxParallel * quantity;
+        return this.tp$maxParallel * quantity;
     }
 }

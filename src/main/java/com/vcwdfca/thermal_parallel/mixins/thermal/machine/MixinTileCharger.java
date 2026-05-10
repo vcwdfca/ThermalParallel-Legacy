@@ -17,17 +17,17 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(value = TileCharger.class, remap = false)
 public class MixinTileCharger extends TileMachineBase implements ParallelUtil {
     @Unique
-    private int thermal_parallel$maxParallel;
+    private int tp$maxParallel;
 
     @Unique
-    private ChargerManager.ChargerRecipe curRecipe;
+    private ChargerManager.ChargerRecipe tp$curRecipe;
 
     @Inject(method = "processStart", at = @At(value = "INVOKE", target = "Lcofh/thermalexpansion/util/managers/machine/ChargerManager$ChargerRecipe;getEnergy()I", ordinal = 1))
     private void initParallel1(CallbackInfo ci, @Local(name = "recipe") ChargerManager.ChargerRecipe recipe) {
-        this.curRecipe = recipe;
-        thermal_parallel$maxParallel = this.maxParallel(
-                this.curRecipe.getInput().getCount(),
-                this.curRecipe.getOutput().getCount(),
+        this.tp$curRecipe = recipe;
+        this.tp$maxParallel = this.maxParallel(
+                this.tp$curRecipe.getInput().getCount(),
+                this.tp$curRecipe.getOutput().getCount(),
                 this.inventory[0].getCount(),
                 this.inventory[1].getCount()
         );
@@ -35,20 +35,20 @@ public class MixinTileCharger extends TileMachineBase implements ParallelUtil {
 
     @ModifyArg(method = "processStart", at = @At(value = "INVOKE", target = "Lcofh/core/util/helpers/ItemHelper;cloneStack(Lnet/minecraft/item/ItemStack;I)Lnet/minecraft/item/ItemStack;"), index = 1)
     private int preParallelInput1(int stackSize) {
-        return this.thermal_parallel$maxParallel * stackSize;
+        return this.tp$maxParallel * stackSize;
     }
 
     @ModifyArg(method = "processStart", at = @At(value = "INVOKE", target = "Lnet/minecraft/item/ItemStack;shrink(I)V"))
     private int preParallelInput2(int quantity) {
-        return this.thermal_parallel$maxParallel * quantity;
+        return this.tp$maxParallel * quantity;
     }
 
     @Inject(method = "processFinish", at = @At(value = "INVOKE", target = "Lcofh/thermalexpansion/util/managers/machine/ChargerManager$ChargerRecipe;getOutput()Lnet/minecraft/item/ItemStack;"))
     private void initParallel2(CallbackInfo ci, @Local(name = "recipe") ChargerManager.ChargerRecipe recipe) {
-        this.curRecipe = recipe;
-        thermal_parallel$maxParallel = this.maxParallel(
-                this.curRecipe.getInput().getCount(),
-                this.curRecipe.getOutput().getCount(),
+        this.tp$curRecipe = recipe;
+        this.tp$maxParallel = this.maxParallel(
+                this.tp$curRecipe.getInput().getCount(),
+                this.tp$curRecipe.getOutput().getCount(),
                 this.inventory[1].getCount(),
                 this.inventory[2].getCount()
         );
@@ -57,12 +57,12 @@ public class MixinTileCharger extends TileMachineBase implements ParallelUtil {
     @ModifyArg(method = "processFinish", at = @At(value = "INVOKE", target = "Lcofh/core/util/helpers/ItemHelper;cloneStack(Lnet/minecraft/item/ItemStack;)Lnet/minecraft/item/ItemStack;"))
     private ItemStack parallelOutput1(ItemStack stack) {
         ItemStack parallelOutput = ItemHelper.cloneStack(stack);
-        parallelOutput.setCount(this.thermal_parallel$maxParallel * parallelOutput.getCount());
+        parallelOutput.setCount(this.tp$maxParallel * parallelOutput.getCount());
         return parallelOutput;
     }
 
     @ModifyArg(method = "processFinish", at = @At(value = "INVOKE", target = "Lnet/minecraft/item/ItemStack;grow(I)V"))
     private int parallelOutput2(int quantity) {
-        return this.thermal_parallel$maxParallel * quantity;
+        return this.tp$maxParallel * quantity;
     }
 }

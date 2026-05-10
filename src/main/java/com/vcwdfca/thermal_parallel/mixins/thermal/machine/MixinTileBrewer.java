@@ -17,7 +17,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(value = TileBrewer.class, remap = false)
 public class MixinTileBrewer extends TileMachineBase implements ParallelUtil {
     @Unique
-    private int thermal_parallel$maxParallel;
+    private int tp$maxParallel;
 
     @Shadow
     private BrewerManager.BrewerRecipe curRecipe;
@@ -30,7 +30,7 @@ public class MixinTileBrewer extends TileMachineBase implements ParallelUtil {
 
     @Inject(method = "processFinish", at = @At(value = "INVOKE", target = "Lcofh/core/fluid/FluidTankCore;fill(Lnet/minecraftforge/fluids/FluidStack;Z)I"))
     private void initParallel(CallbackInfo ci) {
-        this.thermal_parallel$maxParallel = this.maxParallel(
+        this.tp$maxParallel = this.maxParallel(
                 new int[]{this.curRecipe.getInput().getCount(), this.curRecipe.getInputFluid().amount},
                 new int[]{this.curRecipe.getOutputFluid().amount},
                 new int[]{this.inventory[0].getCount(), this.inputTank.getFluidAmount()},
@@ -42,17 +42,17 @@ public class MixinTileBrewer extends TileMachineBase implements ParallelUtil {
     @ModifyArg(method = "processFinish", at = @At(value = "INVOKE", target = "Lcofh/core/fluid/FluidTankCore;fill(Lnet/minecraftforge/fluids/FluidStack;Z)I"), index = 0)
     private FluidStack parallelOutput(FluidStack resource) {
         FluidStack fStack = resource.copy();
-        fStack.amount *= this.thermal_parallel$maxParallel;
+        fStack.amount *= this.tp$maxParallel;
         return fStack;
     }
 
     @ModifyArg(method = "processFinish", at = @At(value = "INVOKE", target = "Lcofh/core/fluid/FluidTankCore;drain(IZ)Lnet/minecraftforge/fluids/FluidStack;"), index = 0)
     private int parallelInput1(int quantity) {
-        return this.thermal_parallel$maxParallel * quantity;
+        return this.tp$maxParallel * quantity;
     }
 
     @ModifyArg(method = "processFinish", at = @At(value = "INVOKE", target = "Lnet/minecraft/item/ItemStack;shrink(I)V"))
     private int parallelInput2(int quantity) {
-        return this.thermal_parallel$maxParallel * quantity;
+        return this.tp$maxParallel * quantity;
     }
 }

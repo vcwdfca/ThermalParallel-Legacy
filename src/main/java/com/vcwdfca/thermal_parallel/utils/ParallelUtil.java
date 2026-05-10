@@ -33,7 +33,7 @@ public interface ParallelUtil {
             return 0;
         }
 
-        int parallelLimit = ((IMixinTileInventory) this).thermal_parallel$getParallel();
+        int parallelLimit = ((IMixinTileInventory) this).tp$getParallel();
         if (parallelLimit <= 0) {
             return 0;
         }

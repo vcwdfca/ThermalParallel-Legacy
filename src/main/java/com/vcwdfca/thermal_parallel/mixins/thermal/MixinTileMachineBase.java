@@ -27,14 +27,14 @@ public abstract class MixinTileMachineBase {
 
     @Inject(method = "preAugmentInstall", at = @At("TAIL"))
     protected void preAddParallelLogic(CallbackInfo ci) {
-        ((IMixinTileInventory) this).thermal_parallel$setParallel(1);
+        ((IMixinTileInventory) this).tp$setParallel(1);
     }
 
     @Inject(method = "installAugmentToSlot", at = @At("TAIL"), cancellable = true)
     protected void addParallelLogic(int slot, CallbackInfoReturnable<Boolean> cir, @Local(name = "id") String id) {
         if(TePaItems.MACHINE_PARALLEL.equals(id)) {
-            int parallel = ((IMixinTileInventory) this).thermal_parallel$getParallel();
-            ((IMixinTileInventory) this).thermal_parallel$setParallel(++parallel);
+            int parallel = ((IMixinTileInventory) this).tp$getParallel();
+            ((IMixinTileInventory) this).tp$setParallel(++parallel);
             cir.setReturnValue(true);
         }
     }

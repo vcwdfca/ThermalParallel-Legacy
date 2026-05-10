@@ -22,7 +22,7 @@ import java.util.List;
 @Mixin(value = TileCentrifuge.class, remap = false)
 public abstract class MixinTileCentrifuge extends TileMachineBase implements ParallelUtil {
     @Unique
-    private int thermal_parallel$maxParallel;
+    private int tp$maxParallel;
 
     @Shadow
     private CentrifugeManager.CentrifugeRecipe curRecipe;
@@ -32,9 +32,9 @@ public abstract class MixinTileCentrifuge extends TileMachineBase implements Par
 
     @Inject(method = "processFinish", at = @At(value = "INVOKE", target = "Lcofh/thermalexpansion/util/managers/machine/CentrifugeManager$CentrifugeRecipe;getOutput()Ljava/util/List;"))
     private void initParallel(CallbackInfo ci) {
-        this.thermal_parallel$maxParallel = this.maxParallel(
-                new int[]{curRecipe.getInput().getCount()},
-                thermal_parallel$initRecipeOutCount(),
+        this.tp$maxParallel = this.maxParallel(
+                new int[]{this.curRecipe.getInput().getCount()},
+                this.tp$initRecipeOutCount(),
                 new int[]{this.inventory[0].getCount()},
                 new int[]{this.inventory[1].getCount(), this.inventory[2].getCount(), this.inventory[3].getCount(), this.inventory[4].getCount(), this.tank.getFluidAmount()}
         );
@@ -42,35 +42,35 @@ public abstract class MixinTileCentrifuge extends TileMachineBase implements Par
 
     @ModifyArg(method = "processFinish", at = @At(value = "INVOKE", target = "Lcofh/core/util/helpers/ItemHelper;cloneStack(Lnet/minecraft/item/ItemStack;I)Lnet/minecraft/item/ItemStack;"), index = 1)
     private int parallelOutput1(int quantity) {
-        return this.thermal_parallel$maxParallel * quantity;
+        return this.tp$maxParallel * quantity;
     }
 
     @ModifyArg(method = "processFinish", at = @At(value = "INVOKE", target = "Lcofh/core/util/helpers/ItemHelper;cloneStack(Lnet/minecraft/item/ItemStack;)Lnet/minecraft/item/ItemStack;"))
     private ItemStack parallelOutput2(ItemStack resource) {
         ItemStack parallelOutput = ItemHelper.cloneStack(resource);
-        parallelOutput.setCount(this.thermal_parallel$maxParallel * parallelOutput.getCount());
+        parallelOutput.setCount(this.tp$maxParallel * parallelOutput.getCount());
         return parallelOutput;
     }
 
     @ModifyArg(method = "processFinish", at = @At(value = "INVOKE", target = "Lnet/minecraft/item/ItemStack;grow(I)V"))
     private int parallelOutput3(int quantity) {
-        return this.thermal_parallel$maxParallel * quantity;
+        return this.tp$maxParallel * quantity;
     }
 
     @ModifyArg(method = "processFinish", at = @At(value = "INVOKE", target = "Lcofh/core/fluid/FluidTankCore;fill(Lnet/minecraftforge/fluids/FluidStack;Z)I"))
     private FluidStack parallelOutput4(FluidStack resource) {
         FluidStack fStack = resource.copy();
-        fStack.amount *= this.thermal_parallel$maxParallel;
+        fStack.amount *= this.tp$maxParallel;
         return fStack;
     }
 
     @ModifyArg(method = "processFinish", at = @At(value = "INVOKE", target = "Lnet/minecraft/item/ItemStack;shrink(I)V"))
     private int parallelInput(int quantity) {
-        return this.thermal_parallel$maxParallel * quantity;
+        return this.tp$maxParallel * quantity;
     }
 
     @Unique
-    private int[] thermal_parallel$initRecipeOutCount() {
+    private int[] tp$initRecipeOutCount() {
         List<ItemStack> stacks = this.curRecipe.getOutput();
         int[] recipeOutCount = new int[5];
         Arrays.fill(recipeOutCount, 0);

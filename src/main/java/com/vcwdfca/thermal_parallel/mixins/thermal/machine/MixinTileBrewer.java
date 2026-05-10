@@ -5,6 +5,7 @@ import cofh.thermalexpansion.block.machine.TileBrewer;
 import cofh.thermalexpansion.block.machine.TileMachineBase;
 import cofh.thermalexpansion.util.managers.machine.BrewerManager;
 import com.vcwdfca.thermal_parallel.utils.ParallelUtil;
+import com.vcwdfca.thermal_parallel.utils.mixins.thermal.IMixinTileInventory;
 import net.minecraftforge.fluids.FluidStack;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -15,7 +16,7 @@ import org.spongepowered.asm.mixin.injection.ModifyArg;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(value = TileBrewer.class, remap = false)
-public class MixinTileBrewer extends TileMachineBase implements ParallelUtil {
+public class MixinTileBrewer extends TileMachineBase {
     @Unique
     private int tp$maxParallel;
 
@@ -30,7 +31,8 @@ public class MixinTileBrewer extends TileMachineBase implements ParallelUtil {
 
     @Inject(method = "processFinish", at = @At(value = "INVOKE", target = "Lcofh/core/fluid/FluidTankCore;fill(Lnet/minecraftforge/fluids/FluidStack;Z)I"))
     private void initParallel(CallbackInfo ci) {
-        this.tp$maxParallel = this.computeMaxParallel(
+        this.tp$maxParallel = ParallelUtil.computeMaxParallel(
+                ((IMixinTileInventory) this).tp$getParallel(),
                 new int[]{this.curRecipe.getInput().getCount(), this.curRecipe.getInputFluid().amount},
                 new int[]{this.curRecipe.getOutputFluid().amount},
                 new int[]{this.inventory[0].getCount(), this.inputTank.getFluidAmount()},

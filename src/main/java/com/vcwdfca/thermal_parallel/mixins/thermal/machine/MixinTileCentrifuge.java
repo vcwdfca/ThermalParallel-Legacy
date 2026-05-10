@@ -6,6 +6,7 @@ import cofh.thermalexpansion.block.machine.TileCentrifuge;
 import cofh.thermalexpansion.block.machine.TileMachineBase;
 import cofh.thermalexpansion.util.managers.machine.CentrifugeManager;
 import com.vcwdfca.thermal_parallel.utils.ParallelUtil;
+import com.vcwdfca.thermal_parallel.utils.mixins.thermal.IMixinTileInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.FluidStack;
 import org.spongepowered.asm.mixin.Mixin;
@@ -20,7 +21,7 @@ import java.util.Arrays;
 import java.util.List;
 
 @Mixin(value = TileCentrifuge.class, remap = false)
-public abstract class MixinTileCentrifuge extends TileMachineBase implements ParallelUtil {
+public abstract class MixinTileCentrifuge extends TileMachineBase {
     @Unique
     private int tp$maxParallel;
 
@@ -32,7 +33,8 @@ public abstract class MixinTileCentrifuge extends TileMachineBase implements Par
 
     @Inject(method = "processFinish", at = @At(value = "INVOKE", target = "Lcofh/thermalexpansion/util/managers/machine/CentrifugeManager$CentrifugeRecipe;getOutput()Ljava/util/List;"))
     private void initParallel(CallbackInfo ci) {
-        this.tp$maxParallel = this.computeMaxParallel(
+        this.tp$maxParallel = ParallelUtil.computeMaxParallel(
+                ((IMixinTileInventory) this).tp$getParallel(),
                 new int[]{this.curRecipe.getInput().getCount()},
                 this.tp$initRecipeOutCount(),
                 new int[]{this.inventory[0].getCount()},

@@ -6,6 +6,7 @@ import cofh.thermalexpansion.block.machine.TileMachineBase;
 import cofh.thermalexpansion.util.managers.machine.ChargerManager;
 import com.llamalad7.mixinextras.sugar.Local;
 import com.vcwdfca.thermal_parallel.utils.ParallelUtil;
+import com.vcwdfca.thermal_parallel.utils.mixins.thermal.IMixinTileInventory;
 import net.minecraft.item.ItemStack;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
@@ -15,7 +16,7 @@ import org.spongepowered.asm.mixin.injection.ModifyArg;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(value = TileCharger.class, remap = false)
-public class MixinTileCharger extends TileMachineBase implements ParallelUtil {
+public class MixinTileCharger extends TileMachineBase {
     @Unique
     private int tp$maxParallel;
 
@@ -25,7 +26,8 @@ public class MixinTileCharger extends TileMachineBase implements ParallelUtil {
     @Inject(method = "processStart", at = @At(value = "INVOKE", target = "Lcofh/thermalexpansion/util/managers/machine/ChargerManager$ChargerRecipe;getEnergy()I", ordinal = 1))
     private void initParallel1(CallbackInfo ci, @Local(name = "recipe") ChargerManager.ChargerRecipe recipe) {
         this.tp$curRecipe = recipe;
-        this.tp$maxParallel = this.computeMaxParallel(
+        this.tp$maxParallel = ParallelUtil.computeMaxParallel(
+                ((IMixinTileInventory) this).tp$getParallel(),
                 this.tp$curRecipe.getInput().getCount(),
                 this.tp$curRecipe.getOutput().getCount(),
                 this.inventory[0].getCount(),
@@ -46,7 +48,8 @@ public class MixinTileCharger extends TileMachineBase implements ParallelUtil {
     @Inject(method = "processFinish", at = @At(value = "INVOKE", target = "Lcofh/thermalexpansion/util/managers/machine/ChargerManager$ChargerRecipe;getOutput()Lnet/minecraft/item/ItemStack;"))
     private void initParallel2(CallbackInfo ci, @Local(name = "recipe") ChargerManager.ChargerRecipe recipe) {
         this.tp$curRecipe = recipe;
-        this.tp$maxParallel = this.computeMaxParallel(
+        this.tp$maxParallel = ParallelUtil.computeMaxParallel(
+                ((IMixinTileInventory) this).tp$getParallel(),
                 this.tp$curRecipe.getInput().getCount(),
                 this.tp$curRecipe.getOutput().getCount(),
                 this.inventory[1].getCount(),

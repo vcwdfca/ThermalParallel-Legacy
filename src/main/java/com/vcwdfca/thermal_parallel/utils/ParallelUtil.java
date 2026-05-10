@@ -1,39 +1,35 @@
 package com.vcwdfca.thermal_parallel.utils;
 
-import cofh.core.block.TileInventory;
-import com.vcwdfca.thermal_parallel.utils.mixins.thermal.IMixinTileInventory;
-
 import java.util.Arrays;
 
-public interface ParallelUtil {
-    default int computeMaxParallel(int recipeIn, int recipeOut, int inCount, int outCount) {
-        return computeMaxParallel(new int[]{recipeIn}, new int[]{recipeOut}, new int[]{inCount}, new int[]{outCount});
+public final class ParallelUtil {
+    private ParallelUtil() {}
+
+    public static int computeMaxParallel(int parallelLimit, int recipeIn, int recipeOut, int inCount, int outCount) {
+        return computeMaxParallel(parallelLimit, new int[]{recipeIn}, new int[]{recipeOut}, new int[]{inCount}, new int[]{outCount});
     }
 
-    default int computeMaxParallel(int recipeIn, int[] recipeOut, int inCount, int[] outCount) {
-        return computeMaxParallel(new int[]{recipeIn}, recipeOut, new int[]{inCount}, outCount);
+    public static int computeMaxParallel(int parallelLimit, int recipeIn, int[] recipeOut, int inCount, int[] outCount) {
+        return computeMaxParallel(parallelLimit, new int[]{recipeIn}, recipeOut, new int[]{inCount}, outCount);
     }
 
-    default int computeMaxParallel(int[] recipeIn, int recipeOut, int[] inCount, int outCount) {
-        return computeMaxParallel(recipeIn, new int[]{recipeOut}, inCount, new int[]{outCount});
+    public static int computeMaxParallel(int parallelLimit, int[] recipeIn, int recipeOut, int[] inCount, int outCount) {
+        return computeMaxParallel(parallelLimit, recipeIn, new int[]{recipeOut}, inCount, new int[]{outCount});
     }
 
-    default int computeMaxParallel(int[] recipeIn, int[] recipeOut, int[] inCount, int[] outCount) {
-        int inventoryStackLimit = ((TileInventory) this).getInventoryStackLimit();
+    public static int computeMaxParallel(int parallelLimit, int[] recipeIn, int[] recipeOut, int[] inCount, int[] outCount) {
         int[] outSlotLimits = new int[recipeOut == null ? 0 : recipeOut.length];
-        Arrays.fill(outSlotLimits, inventoryStackLimit);
-        return computeMaxParallel(recipeIn, recipeOut, inCount, outCount, outSlotLimits);
+        Arrays.fill(outSlotLimits, 64);
+        return computeMaxParallel(parallelLimit, recipeIn, recipeOut, inCount, outCount, outSlotLimits);
     }
 
-    default int computeMaxParallel(int[] recipeIn, int[] recipeOut, int[] inCount, int[] outCount, int[] outSlotLimits) {
+    public static int computeMaxParallel(int parallelLimit, int[] recipeIn, int[] recipeOut, int[] inCount, int[] outCount, int[] outSlotLimits) {
         if (recipeIn == null || recipeOut == null || inCount == null || outCount == null || outSlotLimits == null) {
             return 0;
         }
         if (recipeIn.length != inCount.length || recipeOut.length != outCount.length || recipeOut.length != outSlotLimits.length) {
             return 0;
         }
-
-        int parallelLimit = ((IMixinTileInventory) this).tp$getParallel();
         if (parallelLimit <= 0) {
             return 0;
         }

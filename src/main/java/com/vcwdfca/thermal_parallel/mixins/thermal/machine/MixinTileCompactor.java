@@ -26,7 +26,7 @@ public class MixinTileCompactor extends TileMachineBase implements ParallelUtil 
     @Inject(method = "processFinish", at = @At(value = "INVOKE", target = "Lcofh/thermalexpansion/util/managers/machine/CompactorManager$CompactorRecipe;getOutput()Lnet/minecraft/item/ItemStack;"))
     private void initParallel(CallbackInfo ci, @Local(name = "recipe")CompactorManager.CompactorRecipe recipe) {
         this.curRecipe = recipe;
-        this.tp$maxParallel = this.maxParallel(
+        this.tp$maxParallel = this.computeMaxParallel(
                 this.curRecipe.getInput().getCount(),
                 this.curRecipe.getOutput().getCount(),
                 this.inventory[0].getCount(),

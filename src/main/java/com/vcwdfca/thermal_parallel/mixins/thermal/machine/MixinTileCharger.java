@@ -25,7 +25,7 @@ public class MixinTileCharger extends TileMachineBase implements ParallelUtil {
     @Inject(method = "processStart", at = @At(value = "INVOKE", target = "Lcofh/thermalexpansion/util/managers/machine/ChargerManager$ChargerRecipe;getEnergy()I", ordinal = 1))
     private void initParallel1(CallbackInfo ci, @Local(name = "recipe") ChargerManager.ChargerRecipe recipe) {
         this.tp$curRecipe = recipe;
-        this.tp$maxParallel = this.maxParallel(
+        this.tp$maxParallel = this.computeMaxParallel(
                 this.tp$curRecipe.getInput().getCount(),
                 this.tp$curRecipe.getOutput().getCount(),
                 this.inventory[0].getCount(),
@@ -46,7 +46,7 @@ public class MixinTileCharger extends TileMachineBase implements ParallelUtil {
     @Inject(method = "processFinish", at = @At(value = "INVOKE", target = "Lcofh/thermalexpansion/util/managers/machine/ChargerManager$ChargerRecipe;getOutput()Lnet/minecraft/item/ItemStack;"))
     private void initParallel2(CallbackInfo ci, @Local(name = "recipe") ChargerManager.ChargerRecipe recipe) {
         this.tp$curRecipe = recipe;
-        this.tp$maxParallel = this.maxParallel(
+        this.tp$maxParallel = this.computeMaxParallel(
                 this.tp$curRecipe.getInput().getCount(),
                 this.tp$curRecipe.getOutput().getCount(),
                 this.inventory[1].getCount(),

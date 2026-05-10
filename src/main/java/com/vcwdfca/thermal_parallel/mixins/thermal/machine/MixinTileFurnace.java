@@ -24,7 +24,7 @@ public abstract class MixinTileFurnace extends TileMachineBase implements Parall
 
     @Inject(method = "processFinish", at = @At(value = "INVOKE", target = "Lcofh/thermalexpansion/util/managers/machine/FurnaceManager$FurnaceRecipe;getOutput()Lnet/minecraft/item/ItemStack;"))
     private void initParallel(CallbackInfo ci) {
-        this.tp$maxParallel = this.maxParallel(
+        this.tp$maxParallel = this.computeMaxParallel(
                 this.curRecipe.getInput().getCount(),
                 this.curRecipe.getOutput().getCount(),
                 this.inventory[0].getCount(),

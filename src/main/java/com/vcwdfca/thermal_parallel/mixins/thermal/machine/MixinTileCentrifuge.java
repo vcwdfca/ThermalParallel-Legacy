@@ -32,7 +32,7 @@ public abstract class MixinTileCentrifuge extends TileMachineBase implements Par
 
     @Inject(method = "processFinish", at = @At(value = "INVOKE", target = "Lcofh/thermalexpansion/util/managers/machine/CentrifugeManager$CentrifugeRecipe;getOutput()Ljava/util/List;"))
     private void initParallel(CallbackInfo ci) {
-        this.tp$maxParallel = this.maxParallel(
+        this.tp$maxParallel = this.computeMaxParallel(
                 new int[]{this.curRecipe.getInput().getCount()},
                 this.tp$initRecipeOutCount(),
                 new int[]{this.inventory[0].getCount()},

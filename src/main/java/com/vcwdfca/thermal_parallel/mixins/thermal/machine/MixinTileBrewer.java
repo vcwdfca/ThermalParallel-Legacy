@@ -30,7 +30,7 @@ public class MixinTileBrewer extends TileMachineBase implements ParallelUtil {
 
     @Inject(method = "processFinish", at = @At(value = "INVOKE", target = "Lcofh/core/fluid/FluidTankCore;fill(Lnet/minecraftforge/fluids/FluidStack;Z)I"))
     private void initParallel(CallbackInfo ci) {
-        this.tp$maxParallel = this.maxParallel(
+        this.tp$maxParallel = this.computeMaxParallel(
                 new int[]{this.curRecipe.getInput().getCount(), this.curRecipe.getInputFluid().amount},
                 new int[]{this.curRecipe.getOutputFluid().amount},
                 new int[]{this.inventory[0].getCount(), this.inputTank.getFluidAmount()},

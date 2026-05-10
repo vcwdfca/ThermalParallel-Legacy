@@ -6,26 +6,26 @@ import com.vcwdfca.thermal_parallel.utils.mixins.thermal.IMixinTileInventory;
 import java.util.Arrays;
 
 public interface ParallelUtil {
-    default int maxParallel(int recipeIn, int recipeOut, int inCount, int outCount) {
-        return maxParallel(new int[]{recipeIn}, new int[]{recipeOut}, new int[]{inCount}, new int[]{outCount});
+    default int computeMaxParallel(int recipeIn, int recipeOut, int inCount, int outCount) {
+        return computeMaxParallel(new int[]{recipeIn}, new int[]{recipeOut}, new int[]{inCount}, new int[]{outCount});
     }
 
-    default int maxParallel(int recipeIn, int[] recipeOut, int inCount, int[] outCount) {
-        return maxParallel(new int[]{recipeIn}, recipeOut, new int[]{inCount}, outCount);
+    default int computeMaxParallel(int recipeIn, int[] recipeOut, int inCount, int[] outCount) {
+        return computeMaxParallel(new int[]{recipeIn}, recipeOut, new int[]{inCount}, outCount);
     }
 
-    default int maxParallel(int[] recipeIn, int recipeOut, int[] inCount, int outCount) {
-        return maxParallel(recipeIn, new int[]{recipeOut}, inCount, new int[]{outCount});
+    default int computeMaxParallel(int[] recipeIn, int recipeOut, int[] inCount, int outCount) {
+        return computeMaxParallel(recipeIn, new int[]{recipeOut}, inCount, new int[]{outCount});
     }
 
-    default int maxParallel(int[] recipeIn, int[] recipeOut, int[] inCount, int[] outCount) {
+    default int computeMaxParallel(int[] recipeIn, int[] recipeOut, int[] inCount, int[] outCount) {
         int inventoryStackLimit = ((TileInventory) this).getInventoryStackLimit();
         int[] outSlotLimits = new int[recipeOut == null ? 0 : recipeOut.length];
         Arrays.fill(outSlotLimits, inventoryStackLimit);
-        return maxParallel(recipeIn, recipeOut, inCount, outCount, outSlotLimits);
+        return computeMaxParallel(recipeIn, recipeOut, inCount, outCount, outSlotLimits);
     }
 
-    default int maxParallel(int[] recipeIn, int[] recipeOut, int[] inCount, int[] outCount, int[] outSlotLimits) {
+    default int computeMaxParallel(int[] recipeIn, int[] recipeOut, int[] inCount, int[] outCount, int[] outSlotLimits) {
         if (recipeIn == null || recipeOut == null || inCount == null || outCount == null || outSlotLimits == null) {
             return 0;
         }
